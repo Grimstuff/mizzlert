@@ -123,6 +123,86 @@ async def remove_channel(interaction: discord.Interaction, channel: discord.Text
         )
 
 
+@bot.tree.command(name="test", description="Send a test notification to this channel")
+@app_commands.checks.has_permissions(administrator=True)
+async def test_notification(interaction: discord.Interaction):
+    guild_id = str(interaction.guild_id)
+    channel_id = str(interaction.channel_id)
+    
+    if guild_id not in config.streams:
+        await interaction.response.send_message(
+            "This server is not following any Kick.com channels! Use `/follow` first.",
+            ephemeral=True
+        )
+        return
+
+    # Create test status data
+    test_status = {
+        "is_live": True,
+        "title": "Test Stream",
+        "avatar_url": "https://static.kick.com/images/user-avatar.png",
+        "category_name": "Just Chatting",
+        "category_icon": "https://static.kick.com/categories/just-chatting.png",
+        "thumbnail_url": "https://static.kick.com/video-thumbnails/test-thumbnail.png",
+        "url": f"https://kick.com/{config.streams[guild_id].kick_channel}"
+    }
+
+    # Defer the response since we'll be making API calls
+    await interaction.response.defer(ephemeral=True)
+
+    # Send test notification
+    stream_config = config.streams[guild_id]
+    username = stream_config.kick_channel
+    
+    # Create the embed with test data
+    embed = discord.Embed(
+        description=f"**[{test_status['title']}]({test_status['url']})**",
+        color=discord.Color.brand_green()
+    )
+
+    # Set author with avatar and username
+    embed.set_author(
+        name=username,
+        icon_url=test_status["avatar_url"],
+        url=test_status["url"]
+    )
+
+    # Add category info
+    category_text = f"**Category:** {test_status['category_name']}"
+    embed.description = f"{embed.description}\n{category_text}"
+    embed.set_thumbnail(url=test_status["category_icon"])
+
+    # Add stream preview image
+    embed.set_image(url=test_status["thumbnail_url"])
+
+    # Create view with button
+    view = discord.ui.View()
+    button = discord.ui.Button(
+        style=discord.ButtonStyle.green,
+        label="Watch Stream",
+        url=test_status["url"]
+    )
+    view.add_item(button)
+
+    # Format the notification message
+    message = None
+    for ch_conf in stream_config.discord_channels:
+        if ch_conf['channel_id'] == channel_id:
+            message = ch_conf['message'].format(
+                streamer=username,
+                title=test_status['title'],
+                url=f"[Click to watch]({test_status['url']})"
+            )
+            break
+
+    if message is None:
+        message = f"**{username}** is live with **{test_status['title']}** [Click to watch]({test_status['url']})"
+
+    # Send the test notification
+    await interaction.channel.send(content=message, embed=embed, view=view)
+    await interaction.followup.send("Test notification sent!", ephemeral=True)
+
+
 def run_bot():
     if not config.token:
         token = input("Please enter your Discord bot token: ").strip()

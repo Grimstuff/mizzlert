@@ -202,11 +202,12 @@ class KickMonitor:
                     try:
                         channel = self.bot.get_channel(int(ch_conf['channel_id']))
                         if channel:
+                            # Format the message with title and streamer info
                             message = ch_conf['message'].format(
                                 streamer=username,
                                 title=status['title'],
-                                url=stream_url
-                            )
+                                url=f"[Click to watch]({stream_url})"  # URL as a clickable link
+                            ).strip()
                             await channel.send(content=message, embed=embed, view=view)
                             debug_print(f"Notification sent successfully for {username} to {channel.id}")
                         else:
