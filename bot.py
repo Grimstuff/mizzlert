@@ -1,85 +1,124 @@
 import asyncio
+import discord
+from discord import app_commands
+from discord.ext import commands
 import json
-from playwright.async_api import async_playwright
+from typing import Optional
+from config import config, StreamConfig
+from kick_monitor import KickMonitor
 
-POLL_INTERVAL = 30  # seconds
-DEBUG = True
+class MizzlertBot(commands.Bot):
+    def __init__(self):
+        intents = discord.Intents.default()
+        intents.message_content = True
+        super().__init__(command_prefix="!", intents=intents)
+        self.kick_monitor: Optional[KickMonitor] = None
 
-API_URL = "https://kick.com/api/v2/channels/{username}"
+    async def setup_hook(self):
+        # Start the Kick monitor
+        self.kick_monitor = KickMonitor(self)
+        
+        # Add existing channels from config
+        for guild_config in config.streams.values():
+            await self.kick_monitor.add_channel(guild_config.kick_channel)
+        
+        await self.kick_monitor.start()
 
-async def fetch_channel_status(page, username):
-    url = API_URL.format(username=username)
+bot = MizzlertBot()
+
+@bot.event
+async def on_ready():
+    print(f'Logged in as {bot.user.name}')
     try:
-        # Set headers to mimic a real browser request
-        await page.set_extra_http_headers({
-            'Accept': 'application/json',
-            'Accept-Language': 'en-US,en;q=0.9',
-            'Referer': 'https://kick.com/',
-            'Origin': 'https://kick.com',
-            'sec-ch-ua': '"Chromium";v="116"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"Windows"',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'
-        })
-        
-        # Listen for the API response
-        response_data = None
-        async def handle_response(response):
-            nonlocal response_data
-            if response.url == url:
-                try:
-                    response_data = await response.json()
-                except:
-                    pass
-
-        page.on("response", handle_response)
-        await page.goto(url, wait_until="networkidle")
-        
-        if DEBUG:
-            print(f"\nRaw API Response for {username}:")
-            print(json.dumps(response_data, indent=2))
-            print("\n")
-            
-        response = json.dumps(response_data) if response_data else "{}"
-        
-        try:
-            data = json.loads(response)
-            if DEBUG:
-                print(f"Parsed JSON data:")
-                print(json.dumps(data, indent=2))
-                print("\n")
-
-            livestream = data.get("livestream")
-            if livestream:
-                return {
-                    "is_live": True,
-                    "title": livestream.get("session_title", "Untitled Stream")
-                }
-            else:
-                return {"is_live": False, "title": None}
-        except json.JSONDecodeError as e:
-            print(f"Failed to parse JSON for {username}: {e}")
-            return None
+        synced = await bot.tree.sync()
+        print(f"Synced {len(synced)} command(s)")
     except Exception as e:
-        if DEBUG:
-            print(f"[ERROR] Failed to fetch {username}: {e}")
-        return None
+        print(f"Failed to sync commands: {e}")
 
-async def poll_channels(usernames):
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
-        page = await browser.new_page()
+@bot.tree.command(name="follow", description="Follow a Kick.com channel and set up notifications")
+@app_commands.checks.has_permissions(administrator=True)
+async def follow(interaction: discord.Interaction, kick_channel: str):
+    """Follow a Kick.com channel"""
+    guild_id = str(interaction.guild_id)
+    
+    config.add_stream(guild_id, kick_channel)
+    await bot.kick_monitor.add_channel(kick_channel)
+    
+    await interaction.response.send_message(
+        f"Now following {kick_channel}! Use `/configure` to set up notification channels.",
+        ephemeral=True
+    )
 
-        while True:
-            for username in usernames:
-                status = await fetch_channel_status(page, username)
-                if status:
-                    if status["is_live"]:
-                        print(f"[LIVE] {username} - '{status['title']}'")
-                    else:
-                        print(f"[OFFLINE] {username}")
-            await asyncio.sleep(POLL_INTERVAL)
+@bot.tree.command(name="unfollow", description="Stop following a Kick.com channel")
+@app_commands.checks.has_permissions(administrator=True)
+async def unfollow(interaction: discord.Interaction):
+    """Stop following the current Kick.com channel"""
+    guild_id = str(interaction.guild_id)
+    
+    if guild_id in config.streams:
+        kick_channel = config.streams[guild_id].kick_channel
+        config.remove_stream(guild_id)
+        await bot.kick_monitor.remove_channel(kick_channel)
+        await interaction.response.send_message(
+            f"Stopped following {kick_channel}!",
+            ephemeral=True
+        )
+    else:
+        await interaction.response.send_message(
+            "This server is not following any Kick.com channels!",
+            ephemeral=True
+        )
+
+@bot.tree.command(name="configure", description="Configure notification settings for a Discord channel")
+@app_commands.checks.has_permissions(administrator=True)
+async def configure(
+    interaction: discord.Interaction,
+    channel: discord.TextChannel,
+    message: str = "{streamer} is now live: {title}"
+):
+    """Configure where and how stream notifications are posted"""
+    guild_id = str(interaction.guild_id)
+    
+    if guild_id not in config.streams:
+        await interaction.response.send_message(
+            "Please use `/follow` first to set up a Kick.com channel to follow!",
+            ephemeral=True
+        )
+        return
+    
+    config.add_channel(guild_id, str(channel.id), message)
+    
+    await interaction.response.send_message(
+        f"Configuration saved! Notifications will be posted in {channel.mention}\n"
+        f"Message format: {message}\n"
+        "Available variables: {streamer}, {title}, {url}",
+        ephemeral=True
+    )
+
+@bot.tree.command(name="remove_channel", description="Remove notifications from a Discord channel")
+@app_commands.checks.has_permissions(administrator=True)
+async def remove_channel(interaction: discord.Interaction, channel: discord.TextChannel):
+    """Remove notification settings for a Discord channel"""
+    guild_id = str(interaction.guild_id)
+    
+    if guild_id in config.streams:
+        config.remove_channel(guild_id, str(channel.id))
+        await interaction.response.send_message(
+            f"Removed notifications from {channel.mention}!",
+            ephemeral=True
+        )
+    else:
+        await interaction.response.send_message(
+            "This server is not following any Kick.com channels!",
+            ephemeral=True
+        )
+
+def run_bot():
+    if not config.token:
+        token = input("Please enter your Discord bot token: ")
+        config.set_token(token)
+    
+    bot.run(config.token)
 
 if __name__ == "__main__":
-    usernames_to_track = ["lospollostv"]
-    asyncio.run(poll_channels(usernames_to_track))
+    run_bot()
