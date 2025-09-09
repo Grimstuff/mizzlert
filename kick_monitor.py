@@ -256,6 +256,9 @@ class KickMonitor:
                                 url=f"[Click to watch!]({stream_url})"  # URL as a clickable link
                             ).strip()
                             await channel.send(content=message, embed=embed, view=view)
+                            # Always log successful notifications to console
+                            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                            print(f"[{timestamp}] ✅ Alert posted: {username} is live with '{status['title']}' in #{channel.name}")
                             debug_print(f"Notification sent successfully for {username} to {channel.id}")
                         else:
                             debug_print(f"Discord channel {ch_conf['channel_id']} not found for {username}")
