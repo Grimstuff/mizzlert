@@ -119,7 +119,7 @@ class KickMonitor:
         page.on("response", handle_response)
 
         try:
-            await page.set_extra_http_headers({
+            headers = {
                 'Accept': 'application/json',
                 'Accept-Language': 'en-US,en;q=0.9',
                 'Referer': 'https://kick.com/',
@@ -132,21 +132,67 @@ class KickMonitor:
                     'AppleWebKit/537.36 (KHTML, like Gecko) '
                     'Chrome/116.0.0.0 Safari/537.36'
                 )
-            })
+            }
+            await page.set_extra_http_headers(headers)
+            debug_print(f"[DEBUG] Fetching {url} with headers: {json.dumps(headers)}")
             await page.goto(url, wait_until="networkidle")
 
-            data = response_data or {}
-            livestream = data.get("livestream")
+            if response_data is None:
+                debug_print(f"[ERROR] No response data received for {username}")
+                return None
+                
+            data = response_data
+            debug_print(f"[DEBUG] Raw API response for {username}: {json.dumps(data)[:200]}...")  # Print first 200 chars of response
+            
+            # The channel info is directly in the root of the response
+            channel_data = data
+            debug_print(f"[DEBUG] Channel data keys: {list(channel_data.keys())}")
+            
+            # Check if livestream data exists
+            livestream = None
+            if "livestream" in channel_data:
+                livestream = channel_data["livestream"]
+                debug_print(f"[DEBUG] Livestream data: {json.dumps(livestream)[:200] if livestream else 'None'}")
+                # Add specific debug for thumbnail
+                debug_print(f"[DEBUG] Thumbnail data: {json.dumps(livestream.get('thumbnail', {}))}")
+            else:
+                debug_print(f"[DEBUG] No livestream data found for {username}")
+                return {"is_live": False, "title": None, "url": f"https://kick.com/{username}"}
+            
             if livestream:
-                channel_data = data.get("user", {})
-                category_data = livestream.get("categories", [{}])[0] if livestream.get("categories") else {}
+                # Get category data safely - it might not exist
+                categories = livestream.get("categories", [])
+                category_data = categories[0] if categories else {}
+                # Get user data safely
+                user_data = channel_data.get("user", {})
+                # Try multiple possible thumbnail sources
+                thumbnail_url = None
+                
+                # First try the livestream thumbnail
+                thumbnail = livestream.get("thumbnail", {}) or {}
+                thumbnail_url = thumbnail.get("url")
+                
+                # If no thumbnail, try video thumbnail
+                if not thumbnail_url and "video_thumbnail" in livestream:
+                    thumbnail_url = livestream.get("video_thumbnail")
+                
+                # If still no thumbnail, construct one from the channel
+                if not thumbnail_url:
+                    # Try to get a thumbnail from the channel's assets
+                    channel_id = livestream.get("channel_id")
+                    if channel_id:
+                        thumbnail_url = f"https://thumb.kick.com/images/{channel_id}/thumbnail.jpg"
+                        debug_print(f"[DEBUG] Using constructed thumbnail URL")
+                
+                debug_print(f"[DEBUG] Final thumbnail URL: {thumbnail_url}")
+                
                 return {
                     "is_live": True,
                     "title": livestream.get("session_title", "Untitled Stream"),
-                    "avatar_url": channel_data.get("profile_pic"),
+                    "avatar_url": user_data.get("profile_pic"),
                     "category_name": category_data.get("name", "No Category"),
-                    "category_icon": category_data.get("icon", None),
-                    "thumbnail_url": livestream.get("thumbnail", {}).get("url"),
+                    "category_icon": category_data.get("icon"),
+                    "thumbnail_url": thumbnail_url,
                     "url": f"https://kick.com/{username}"
                 }
             else:
@@ -154,6 +200,7 @@ class KickMonitor:
 
         except Exception as e:
             debug_print(f"[ERROR] Failed to fetch {username}: {e}")
+            debug_print(f"[ERROR] Full error details: {type(e).__name__}: {str(e)}")
             return None
         finally:
             await page.close()
@@ -206,7 +253,7 @@ class KickMonitor:
                             message = ch_conf['message'].format(
                                 streamer=username,
                                 title=status['title'],
-                                url=f"[Click to watch]({stream_url})"  # URL as a clickable link
+                                url=f"[Click to watch!]({stream_url})"  # URL as a clickable link
                             ).strip()
                             await channel.send(content=message, embed=embed, view=view)
                             debug_print(f"Notification sent successfully for {username} to {channel.id}")

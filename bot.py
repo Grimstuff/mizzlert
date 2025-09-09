@@ -13,7 +13,8 @@ class MizzlertBot(commands.Bot):
     def __init__(self):
         intents = discord.Intents.default()
         intents.message_content = True
-        super().__init__(command_prefix="!", intents=intents)
+        # Use a very unlikely prefix since we only use slash commands
+        super().__init__(command_prefix="mizzlert_", intents=intents)
         self.kick_monitor: Optional[KickMonitor] = None
 
     async def setup_hook(self):
@@ -43,6 +44,15 @@ async def on_ready():
         print(f"Synced {len(synced)} command(s)")
     except Exception as e:
         print(f"Failed to sync commands: {e}")
+
+
+@bot.event
+async def on_command_error(ctx, error):
+    """Suppress CommandNotFound errors since we only use slash commands"""
+    if isinstance(error, commands.CommandNotFound):
+        return  # Silently ignore command not found errors
+    # For any other errors, you can add logging here if needed
+    print(f"Command error: {error}")
 
 
 @bot.tree.command(name="follow", description="Follow a Kick.com channel and set up notifications")
