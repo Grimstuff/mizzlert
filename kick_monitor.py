@@ -153,13 +153,13 @@ class KickMonitor:
             if "livestream" in channel_data:
                 livestream = channel_data["livestream"]
                 debug_print(f"[DEBUG] Livestream data: {json.dumps(livestream)[:200] if livestream else 'None'}")
-                # Add specific debug for thumbnail
-                debug_print(f"[DEBUG] Thumbnail data: {json.dumps(livestream.get('thumbnail', {}))}")
             else:
                 debug_print(f"[DEBUG] No livestream data found for {username}")
                 return {"is_live": False, "title": None, "url": f"https://kick.com/{username}"}
             
             if livestream:
+                # Add specific debug for thumbnail
+                debug_print(f"[DEBUG] Thumbnail data: {json.dumps(livestream.get('thumbnail', {}))}")
                 # Get category data safely - it might not exist
                 categories = livestream.get("categories", [])
                 category_data = categories[0] if categories else {}

@@ -4,9 +4,18 @@ from discord import app_commands
 from discord.ext import commands
 import signal
 from typing import Optional
+import logging
+from datetime import datetime, timedelta
 
 from config import config, StreamConfig
 from kick_monitor import KickMonitor
+
+
+# Suppress Discord.py gateway INFO logs (including RESUME messages)
+logging.getLogger('discord.gateway').setLevel(logging.WARNING)
+
+# Global variable to track disconnect time
+disconnect_time = None
 
 
 class MizzlertBot(commands.Bot):
@@ -53,6 +62,31 @@ async def on_command_error(ctx, error):
         return  # Silently ignore command not found errors
     # For any other errors, you can add logging here if needed
     print(f"Command error: {error}")
+
+
+@bot.event
+async def on_disconnect():
+    """Called when the bot disconnects from Discord."""
+    global disconnect_time
+    disconnect_time = datetime.now()
+    # Optional: Log a brief message for debugging (you can remove this if too noisy)
+    print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ⚠️  Bot disconnected from Discord.")
+
+
+@bot.event
+async def on_resume(session_id):
+    """Called when the bot resumes a session after disconnection."""
+    global disconnect_time
+    if disconnect_time:
+        reconnect_time = datetime.now()
+        downtime = reconnect_time - disconnect_time
+        
+        # Only log if downtime > 30 seconds
+        if downtime > timedelta(seconds=30):
+            print(f"[{reconnect_time.strftime('%Y-%m-%d %H:%M:%S')}] ❌ Bot was offline for {downtime.total_seconds():.0f} seconds - Reconnected (Session: {session_id[:8]}...)")
+        
+        # Reset for next disconnection
+        disconnect_time = None
 
 
 @bot.tree.command(name="follow", description="Follow a Kick.com channel and set up notifications")
