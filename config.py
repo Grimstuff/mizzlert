@@ -8,9 +8,10 @@ DEFAULT_DEBUG = True
 
 
 class StreamConfig:
-    def __init__(self, kick_channel: str, discord_channels: List[Dict[str, str]]):
+    def __init__(self, kick_channel: str, discord_channels: List[Dict[str, str]], thumbnail_delay: int = 0):
         self.kick_channel = kick_channel
         self.discord_channels = discord_channels  # List of dicts with channel_id and message
+        self.thumbnail_delay = thumbnail_delay
 
 
 class BotConfig:
@@ -36,7 +37,8 @@ class BotConfig:
             self.streams = {
                 guild_id: StreamConfig(
                     stream_data['kick_channel'],
-                    stream_data['discord_channels']
+                    stream_data['discord_channels'],
+                    stream_data.get('thumbnail_delay', 0)
                 )
                 for guild_id, stream_data in streams_data.items()
             }
@@ -49,7 +51,8 @@ class BotConfig:
             'streams': {
                 guild_id: {
                     'kick_channel': config.kick_channel,
-                    'discord_channels': config.discord_channels
+                    'discord_channels': config.discord_channels,
+                    'thumbnail_delay': config.thumbnail_delay
                 }
                 for guild_id, config in self.streams.items()
             }
@@ -71,7 +74,7 @@ class BotConfig:
 
     def add_stream(self, guild_id: str, kick_channel: str):
         if guild_id not in self.streams:
-            self.streams[guild_id] = StreamConfig(kick_channel, [])
+            self.streams[guild_id] = StreamConfig(kick_channel, [], 0)
         else:
             self.streams[guild_id].kick_channel = kick_channel
         self.save_config()
@@ -99,6 +102,11 @@ class BotConfig:
                 c for c in self.streams[guild_id].discord_channels
                 if c['channel_id'] != channel_id
             ]
+            self.save_config()
+
+    def set_thumbnail_delay(self, guild_id: str, delay: int):
+        if guild_id in self.streams:
+            self.streams[guild_id].thumbnail_delay = delay
             self.save_config()
 
 

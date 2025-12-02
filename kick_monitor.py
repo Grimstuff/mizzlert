@@ -94,6 +94,23 @@ class KickMonitor:
 
         if is_live and not was_live:
             debug_print(f"Stream just went live: {username} - Sending notification")
+            
+            # Check if any guild has a delay configured for this streamer
+            max_delay = 0
+            for stream_config in config.streams.values():
+                if stream_config.kick_channel == username:
+                    max_delay = max(max_delay, getattr(stream_config, 'thumbnail_delay', 0))
+            
+            if max_delay > 0:
+                debug_print(f"Waiting {max_delay}s for thumbnail generation before notifying...")
+                await asyncio.sleep(max_delay)
+                # Re-fetch status to get the latest thumbnail
+                new_status = await self._fetch_channel_status(username)
+                if new_status and new_status["is_live"]:
+                    status = new_status
+                else:
+                    debug_print(f"Stream went offline during delay or fetch failed, using original status")
+
             await self._notify_discord(username, status)
 
         self.live_status[username] = is_live
@@ -176,14 +193,24 @@ class KickMonitor:
                 if not thumbnail_url and "video_thumbnail" in livestream:
                     thumbnail_url = livestream.get("video_thumbnail")
                 
-                # If still no thumbnail, construct one from the channel
+                # If still no thumbnail, try the channel banner as a fallback
+                if not thumbnail_url:
+                    banner_image = channel_data.get("banner_image", {})
+                    if banner_image:
+                        thumbnail_url = banner_image.get("url")
+                        debug_print(f"[DEBUG] Using banner image as fallback thumbnail")
+
+                # If still no thumbnail, construct one from the channel (last resort, often fails)
                 if not thumbnail_url:
                     # Try to get a thumbnail from the channel's assets
-                    channel_id = livestream.get("channel_id")
-                    if channel_id:
-                        thumbnail_url = f"https://thumb.kick.com/images/{channel_id}/thumbnail.jpg"
-                        debug_print(f"[DEBUG] Using constructed thumbnail URL")
+                    # Note: thumb.kick.com seems to be dead/unreliable, but keeping logic just in case
+                    # We prefer banner_image above which is known to work
+                    pass
                 
+                # Add cache busting to thumbnail URL to prevent Discord caching issues
+                if thumbnail_url:
+                    thumbnail_url = f"{thumbnail_url}?t={int(datetime.now().timestamp())}"
+
                 debug_print(f"[DEBUG] Final thumbnail URL: {thumbnail_url}")
                 
                 return {

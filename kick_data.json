@@ -1,0 +1,349 @@
+{
+  "id": 63898389,
+  "user_id": 65045277,
+  "slug": "lifeismizzy",
+  "is_banned": false,
+  "playback_url": "https://fa723fc1b171.us-west-2.playback.live-video.net/api/video/v1/us-west-2.196233775518.channel.7T3ckfaicwgo.m3u8?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzM4NCJ9.eyJhd3M6Y2hhbm5lbC1hcm4iOiJhcm46YXdzOml2czp1cy13ZXN0LTI6MTk2MjMzNzc1NTE4OmNoYW5uZWwvN1QzY2tmYWljd2dvIiwiYXdzOmFjY2Vzcy1jb250cm9sLWFsbG93LW9yaWdpbiI6Imh0dHBzOi8va2ljay5jb20saHR0cHM6Ly93d3cuZ3N0YXRpYy5jb20saHR0cHM6Ly8qLmtpY2subGl2ZSxodHRwczovL3BsYXllci5raWNrLmNvbSxodHRwczovL2FkbWluLmtpY2suY29tLGh0dHBzOi8vYmV0YS5raWNrLmNvbSxodHRwczovL25leHQua2ljay5jb20saHR0cHM6Ly9kYXNoYm9hcmQua2ljay5jb20saHR0cHM6Ly8qLnByZXZpZXcua2ljay5jb20saHR0cHM6Ly94Ym94LmtpY2suY29tLGh0dHBzOi8vcGxheXN0YXRpb24ua2ljay5jb20iLCJhd3M6c3RyaWN0LW9yaWdpbi1lbmZvcmNlbWVudCI6ZmFsc2UsImV4cCI6MTc2NDY0MDQxM30.tUGKXXbNkvs9FfVIGyUW_xtOMOZFKEXXiN-4aneTHexMVcT2lYgqBqzO5BCm0PlDkqK7F-hdtuayex9MItjGbOdZb-43il-8Cs0m7oZYimehhQfioKKOkxPcrT-iyeGI",
+  "vod_enabled": true,
+  "subscription_enabled": true,
+  "is_affiliate": true,
+  "followers_count": 5743,
+  "subscriber_badges": [
+    {
+      "id": 722866,
+      "channel_id": 63898389,
+      "months": 1,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/722866/original"
+      }
+    },
+    {
+      "id": 533368,
+      "channel_id": 63898389,
+      "months": 2,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/533368/original"
+      }
+    },
+    {
+      "id": 533382,
+      "channel_id": 63898389,
+      "months": 3,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/533382/original"
+      }
+    },
+    {
+      "id": 533379,
+      "channel_id": 63898389,
+      "months": 6,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/533379/original"
+      }
+    },
+    {
+      "id": 533369,
+      "channel_id": 63898389,
+      "months": 9,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/533369/original"
+      }
+    },
+    {
+      "id": 533343,
+      "channel_id": 63898389,
+      "months": 12,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/533343/original"
+      }
+    },
+    {
+      "id": 533349,
+      "channel_id": 63898389,
+      "months": 18,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/533349/original"
+      }
+    },
+    {
+      "id": 533386,
+      "channel_id": 63898389,
+      "months": 24,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/533386/original"
+      }
+    },
+    {
+      "id": 533348,
+      "channel_id": 63898389,
+      "months": 30,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/533348/original"
+      }
+    },
+    {
+      "id": 533345,
+      "channel_id": 63898389,
+      "months": 36,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/533345/original"
+      }
+    },
+    {
+      "id": 533384,
+      "channel_id": 63898389,
+      "months": 42,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/533384/original"
+      }
+    },
+    {
+      "id": 533385,
+      "channel_id": 63898389,
+      "months": 48,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/533385/original"
+      }
+    },
+    {
+      "id": 533390,
+      "channel_id": 63898389,
+      "months": 54,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/533390/original"
+      }
+    },
+    {
+      "id": 533396,
+      "channel_id": 63898389,
+      "months": 60,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/533396/original"
+      }
+    },
+    {
+      "id": 533395,
+      "channel_id": 63898389,
+      "months": 66,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/533395/original"
+      }
+    },
+    {
+      "id": 533405,
+      "channel_id": 63898389,
+      "months": 72,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/533405/original"
+      }
+    },
+    {
+      "id": 533406,
+      "channel_id": 63898389,
+      "months": 78,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/533406/original"
+      }
+    },
+    {
+      "id": 533414,
+      "channel_id": 63898389,
+      "months": 84,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/533414/original"
+      }
+    },
+    {
+      "id": 533416,
+      "channel_id": 63898389,
+      "months": 90,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/533416/original"
+      }
+    },
+    {
+      "id": 533429,
+      "channel_id": 63898389,
+      "months": 96,
+      "badge_image": {
+        "srcset": "",
+        "src": "https://files.kick.com/channel_subscriber_badges/533429/original"
+      }
+    }
+  ],
+  "banner_image": {
+    "url": "https://files.kick.com/images/channel/63898389/banner_image/770cb0b5-b08f-4af3-84d7-db8e2bcd5f21"
+  },
+  "livestream": {
+    "id": 86031601,
+    "slug": "63b6f516-im-done-staying-silent-its-finally-time-to-tell-the-truth-subathon-day-11",
+    "channel_id": 63898389,
+    "created_at": "2025-12-02 00:01:32",
+    "session_title": "I'M DONE STAYING SILENT. IT'S FINALLY TIME TO TELL THE TRUTH... - SUBATHON DAY 11",
+    "is_live": true,
+    "risk_level_id": null,
+    "start_time": "2025-12-02 00:01:30",
+    "source": null,
+    "twitch_channel": null,
+    "duration": 0,
+    "language": "English",
+    "is_mature": true,
+    "viewer_count": 83,
+    "thumbnail": {
+      "url": "https://stream.kick.com/thumbnails/livestream/86031601/thumb0/video_thumbnail/thumb0.jpg"
+    },
+    "lang_iso": "en",
+    "tags": [
+      "chill",
+      "funny",
+      "tts",
+      "fun",
+      "girl",
+      "cosplay",
+      "emo",
+      "pitchkick",
+      "fishtank",
+      "FreeTTS"
+    ],
+    "categories": [
+      {
+        "id": 15,
+        "category_id": 2,
+        "name": "Just Chatting",
+        "slug": "just-chatting",
+        "tags": [
+          "IRL",
+          "Casual"
+        ],
+        "description": null,
+        "deleted_at": null,
+        "is_mature": false,
+        "is_promoted": false,
+        "viewers": 172712,
+        "is_fallback": true,
+        "category": {
+          "id": 2,
+          "name": "IRL",
+          "slug": "irl",
+          "icon": "\ud83c\udf99\ufe0f"
+        }
+      }
+    ]
+  },
+  "role": null,
+  "muted": false,
+  "follower_badges": [],
+  "offline_banner_image": {
+    "src": "https://files.kick.com/images/channel/63898389/offline_banner/conversion/0804bc7e-2a9d-4ce7-8a2b-6f08472481bc-fullsize.webp",
+    "srcset": "https://files.kick.com/images/channel/63898389/offline_banner/responsives/0804bc7e-2a9d-4ce7-8a2b-6f08472481bc___fullsize_1200_1200.webp 1200w, https://files.kick.com/images/channel/63898389/offline_banner/responsives/0804bc7e-2a9d-4ce7-8a2b-6f08472481bc___fullsize_1003_1003.webp 1003w, https://files.kick.com/images/channel/63898389/offline_banner/responsives/0804bc7e-2a9d-4ce7-8a2b-6f08472481bc___fullsize_839_839.webp 839w, https://files.kick.com/images/channel/63898389/offline_banner/responsives/0804bc7e-2a9d-4ce7-8a2b-6f08472481bc___fullsize_702_702.webp 702w, https://files.kick.com/images/channel/63898389/offline_banner/responsives/0804bc7e-2a9d-4ce7-8a2b-6f08472481bc___fullsize_587_587.webp 587w, https://files.kick.com/images/channel/63898389/offline_banner/responsives/0804bc7e-2a9d-4ce7-8a2b-6f08472481bc___fullsize_491_491.webp 491w, https://files.kick.com/images/channel/63898389/offline_banner/responsives/0804bc7e-2a9d-4ce7-8a2b-6f08472481bc___fullsize_411_411.webp 411w"
+  },
+  "verified": true,
+  "recent_categories": [
+    {
+      "id": 15,
+      "category_id": 2,
+      "name": "Just Chatting",
+      "slug": "just-chatting",
+      "tags": [
+        "IRL",
+        "Casual"
+      ],
+      "description": null,
+      "deleted_at": null,
+      "is_mature": false,
+      "is_promoted": false,
+      "viewers": 172712,
+      "is_fallback": true,
+      "banner": {
+        "responsive": "https://files.kick.com/images/subcategories/15/banner/responsives/b697a8a3-62db-4779-aa76-e4e47662af97___banner_600_800.webp 600w, https://files.kick.com/images/subcategories/15/banner/responsives/b697a8a3-62db-4779-aa76-e4e47662af97___banner_501_668.webp 501w, https://files.kick.com/images/subcategories/15/banner/responsives/b697a8a3-62db-4779-aa76-e4e47662af97___banner_420_560.webp 420w, https://files.kick.com/images/subcategories/15/banner/responsives/b697a8a3-62db-4779-aa76-e4e47662af97___banner_351_468.webp 351w, https://files.kick.com/images/subcategories/15/banner/responsives/b697a8a3-62db-4779-aa76-e4e47662af97___banner_294_392.webp 294w",
+        "url": "https://files.kick.com/images/subcategories/15/banner/b697a8a3-62db-4779-aa76-e4e47662af97"
+      },
+      "category": {
+        "id": 2,
+        "name": "IRL",
+        "slug": "irl",
+        "icon": "\ud83c\udf99\ufe0f"
+      }
+    },
+    {
+      "id": 8549,
+      "category_id": 2,
+      "name": "IRL",
+      "slug": "irl",
+      "tags": [
+        "IRL",
+        "Adventure"
+      ],
+      "description": null,
+      "deleted_at": null,
+      "is_mature": false,
+      "is_promoted": false,
+      "viewers": 93723,
+      "is_fallback": false,
+      "banner": {
+        "responsive": "https://files.kick.com/images/subcategories/8549/banner/responsives/3b142fca-b643-48d9-8ed0-405d454181d1___banner_408_546.webp 408w, https://files.kick.com/images/subcategories/8549/banner/responsives/3b142fca-b643-48d9-8ed0-405d454181d1___banner_341_456.webp 341w, https://files.kick.com/images/subcategories/8549/banner/responsives/3b142fca-b643-48d9-8ed0-405d454181d1___banner_285_381.webp 285w, https://files.kick.com/images/subcategories/8549/banner/responsives/3b142fca-b643-48d9-8ed0-405d454181d1___banner_238_319.webp 238w, https://files.kick.com/images/subcategories/8549/banner/responsives/3b142fca-b643-48d9-8ed0-405d454181d1___banner_199_266.webp 199w",
+        "url": "https://files.kick.com/images/subcategories/8549/banner/3b142fca-b643-48d9-8ed0-405d454181d1"
+      },
+      "category": {
+        "id": 2,
+        "name": "IRL",
+        "slug": "irl",
+        "icon": "\ud83c\udf99\ufe0f"
+      }
+    }
+  ],
+  "can_host": true,
+  "user": {
+    "id": 65045277,
+    "username": "lifeismizzy",
+    "agreed_to_terms": true,
+    "email_verified_at": "2025-06-08T01:31:44.000000Z",
+    "bio": "\ud83d\udda4\ud83d\udc9aKICK PARTNER\ud83d\udc9a\ud83d\udda4  \n\n\ud83d\udc9a\ud83d\udda4Bringing back Nostalgic characters with lots of fun activities all year round\ud83d\udc9a\ud83d\udda4\n\nFor $TTS & MEDIA SHARE https://streamlabs.com/lifeismizzy/tip",
+    "country": null,
+    "state": null,
+    "city": null,
+    "instagram": "lifeismizzy",
+    "twitter": "lifeismizzy",
+    "youtube": "lifeismizzy",
+    "discord": "Discord.gg/mizzcord",
+    "tiktok": "lifeismizzy",
+    "facebook": "",
+    "gender": null,
+    "profile_pic": "https://files.kick.com/images/user/65045277/profile_image/conversion/eb4805d7-2df0-42fb-9b7c-726ce9ffc55e-fullsize.webp"
+  },
+  "chatroom": {
+    "id": 63609978,
+    "chatable_type": "App\\Models\\Channel",
+    "channel_id": 63898389,
+    "created_at": "2025-06-08T01:31:44.000000Z",
+    "updated_at": "2025-10-23T02:38:11.000000Z",
+    "chat_mode_old": "public",
+    "chat_mode": "public",
+    "slow_mode": false,
+    "chatable_id": 63898389,
+    "followers_mode": true,
+    "subscribers_mode": false,
+    "emotes_mode": false,
+    "message_interval": 1,
+    "following_min_duration": 2
+  }
+}

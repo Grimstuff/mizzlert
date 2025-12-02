@@ -167,6 +167,33 @@ async def remove_channel(interaction: discord.Interaction, channel: discord.Text
         )
 
 
+@bot.tree.command(name="set_delay", description="Set a delay (in seconds) before posting notifications to allow thumbnails to generate")
+@app_commands.checks.has_permissions(administrator=True)
+async def set_delay(interaction: discord.Interaction, delay_seconds: int):
+    guild_id = str(interaction.guild_id)
+
+    if guild_id not in config.streams:
+        await interaction.response.send_message(
+            "This server is not following any Kick.com channels! Use `/follow` first.",
+            ephemeral=True
+        )
+        return
+
+    if delay_seconds < 0:
+        await interaction.response.send_message(
+            "Delay cannot be negative!",
+            ephemeral=True
+        )
+        return
+
+    config.set_thumbnail_delay(guild_id, delay_seconds)
+    
+    await interaction.response.send_message(
+        f"Notification delay set to {delay_seconds} seconds. The bot will wait this long after detecting a stream to ensure the thumbnail is ready.",
+        ephemeral=True
+    )
+
+
 @bot.tree.command(name="test", description="Send a test notification to this channel")
 @app_commands.checks.has_permissions(administrator=True)
 async def test_notification(interaction: discord.Interaction):
